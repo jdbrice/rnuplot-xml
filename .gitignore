@@ -1,0 +1,12 @@
+*.o
+*.log
+*.dat
+rnuplot
+.sconsign.dblite
+*.pdf
+*.eps
+*.ps
+*.gnu
+.DS_Store
+*.root
+.vscode/
