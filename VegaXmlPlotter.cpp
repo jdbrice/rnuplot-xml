@@ -31,9 +31,18 @@
 //
 
 
+// #include "DataFileMaker.h"
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__TOS_WIN__)
+size_t DataFileMaker::tmpfile_count_max = 27;
+#elif defined(unix) || defined(__unix) || defined(__unix__) || defined(__APPLE__)
+size_t DataFileMaker::tmpfile_count_max = 64;
+#endif
+size_t DataFileMaker::tmpfile_count = 0;
+
+
 inline bool exists_test (const std::string& name) {
-  struct stat buffer;   
-  return (stat (name.c_str(), &buffer) == 0); 
+	struct stat buffer;   
+	return (stat (name.c_str(), &buffer) == 0); 
 }
 
 
@@ -170,7 +179,7 @@ void VegaXmlPlotter::make(){
 		LOG_F( WARNING, "No valid data files found" );
 	}
 
-    vector<string> paths = config.childrenOf( "", "ExportConfig" );
+	vector<string> paths = config.childrenOf( "", "ExportConfig" );
 	for ( string p : paths ){
 		exec_node( p );
 	}
@@ -690,7 +699,24 @@ void VegaXmlPlotter::exec_Histogram( string _path ){
 void VegaXmlPlotter::exec_Gnuplot( string _path ){
 	LOG_SCOPE_FUNCTION( INFO );
 
+	//  get inline BUT means escape chars :(
 	string lines = config.get<string>( _path );
+
+	if ( config.exists( _path + ":script" ) ){
+		// is this a file ?
+		if ( exists_test( config.get<string>( _path + ":script" ) ) ){
+			string gnuscript = config.get<string>( _path + ":script" );
+			LOG_F( INFO, "Reading gnuplot script from file : %s", gnuscript.c_str() );
+			ifstream gnuscriptf( gnuscript.c_str() );
+			string aline = "";
+			while (std::getline(gnuscriptf, aline)){
+				lines += aline + "\n";
+			}
+		} else { // inline (probably to allow escape characters)
+			lines = config.get<string>( _path + ":script" );
+		}
+	}
+
 
 	LOG_F( INFO, "LINES \n%s", lines.c_str() );
 
@@ -753,31 +779,39 @@ void VegaXmlPlotter::exec_Data( string _path ){
 
 	string dfvn = config.get<string>( _path +":name" );
 
-	vector<double> x, y, x_low, x_high, y_low, y_high;
-	for ( int i = 1; i < h->GetNbinsX(); i++ ){
-		double vx = h->GetBinCenter( i );
-		double vy = h->GetBinContent( i );
-		double vey = h->GetBinError( i );
-
-		x.push_back( vx );
-		x_low.push_back( h->GetBinLowEdge(i) );
-		x_high.push_back( h->GetBinLowEdge(i) + h->GetBinWidth(i) );
-		y.push_back( vy );
-		y_low.push_back( vy - vey );
-		y_high.push_back( vy + vey );
-	}
-
 	string dfn = "";
-
 	if ( true == config.get<bool>( _path + ":local", false ) ){
-		dfn = gnuplot.df( dfvn, x, y, x_low, x_high, y_low, y_high );
-	} else {
-		dfn = gnuplot.df( x, y, x_low, x_high, y_low, y_high );
+		dfn = dfvn + ".dat";
 	}
 
-	if ( "" == dfn ){
-		LOG_F( ERROR, "Cannot make data file from %s", config.get<string>( _path+":from" ).c_str() );
-	}
+	dfn = datafilemaker.convert( h, config.get<string>( _path + ":format" ), dfn );
+
+
+	// vector<double> x, y, x_low, x_high, y_low, y_high;
+	// for ( int i = 1; i < h->GetNbinsX(); i++ ){
+	// 	double vx = h->GetBinCenter( i );
+	// 	double vy = h->GetBinContent( i );
+	// 	double vey = h->GetBinError( i );
+
+	// 	x.push_back( vx );
+	// 	x_low.push_back( h->GetBinLowEdge(i) );
+	// 	x_high.push_back( h->GetBinLowEdge(i) + h->GetBinWidth(i) );
+	// 	y.push_back( vy );
+	// 	y_low.push_back( vy - vey );
+	// 	y_high.push_back( vy + vey );
+	// }
+
+	// string dfn = "";
+
+	// if ( true == config.get<bool>( _path + ":local", false ) ){
+	// 	dfn = gnuplot.df( dfvn, x, y, x_low, x_high, y_low, y_high );
+	// } else {
+	// 	dfn = gnuplot.df( x, y, x_low, x_high, y_low, y_high );
+	// }
+
+	// if ( "" == dfn ){
+	// 	LOG_F( ERROR, "Cannot make data file from %s", config.get<string>( _path+":from" ).c_str() );
+	// }
 
 	gnudf[ dfvn ] = dfn;
 	LOG_F( INFO, "Data File [%s] = %s", dfvn.c_str(), dfn.c_str());
@@ -997,33 +1031,21 @@ map<string, TObject*> VegaXmlPlotter::dirMap( TDirectory *dir, string prefix, bo
 
 std::string cmdexec(const char* cmd) {
 	LOG_SCOPE_FUNCTION( INFO );
-    std::array<char, 128> buffer;
-    std::string result;
-    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
-    if (!pipe) {
-        throw std::runtime_error("popen() failed!");
-    }
-    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-        result += buffer.data();
-    }
-    return result;
+	std::array<char, 128> buffer;
+	std::string result;
+	std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
+	if (!pipe) {
+		throw std::runtime_error("popen() failed!");
+	}
+	while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+		result += buffer.data();
+	}
+	return result;
 }
 
 
 void VegaXmlPlotter::exec_Latex( string _path ){
 	LOG_SCOPE_FUNCTION( INFO );
-	// const char *ltemplate = R"EEE(
-
-	// \documentclass{article}
-	// \usepackage{graphicx}
-	// \batchmode
-	// \begin{document}
-	// \pagenumbering{gobble}
-	// \input{%s}
-	// \end{document}
-	// )EEE";
-
-
 
 	string figure_filename = config.get<string>( _path + ":from" );
 	size_t lastindex = figure_filename.find_last_of("."); 

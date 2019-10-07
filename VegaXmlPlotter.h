@@ -31,6 +31,7 @@ using namespace std;
 #include "gnuplot_i.hpp"
 
 
+#include "DataFileMaker.h"
 
 
 
@@ -55,6 +56,8 @@ protected:
 	Gnuplot gnuplot;
 	size_t nplots;
 	string current_out;
+
+	DataFileMaker datafilemaker;
 
 public:
 
