@@ -31,6 +31,17 @@ Rnuplot uses xml files as scripts.
 	<!-- This one reads the gnuplot script in hello-plot.gnuplot -->
 	<Gnuplot script="hello-plot.gnuplot" />
 
+	<!-- This one reads from the XML node body. ">, <, &" etc. need to be escaped here  -->
+	<Gnuplot>
+		set terminal epslatex standalone 
+		set output "figure.tex"
+		plot h1 w histeps t "Histogram"
+	</Gnuplot>
+
+	<!-- This will run pdflatex on the figure produced above -->
+	<!-- will produce figure.pdf with all latex typeset on the figure -->
+	<Latex from="figure.tex" />
+
 </config>
 ```
 
@@ -65,3 +76,13 @@ Should be used with: `set terminal epslatex standalone`. The `standalone` settin
 Attributes:
 - **from** : The name of the **.tex** figure file to convert.
 - **clean** : (Optional) set to false to prevent clean up of latex files and logs
+
+
+### Building
+
+
+### External Dependencies 
+- ROOT : https://root.cern.ch/
+
+### Libraries and tools
+- Gnuplot iostream interface for c++ (https://code.google.com/archive/p/gnuplot-cpp/)
