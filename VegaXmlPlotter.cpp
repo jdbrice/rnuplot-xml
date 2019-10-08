@@ -75,30 +75,6 @@ void VegaXmlPlotter::init(){
 	handle_map[ "Legend"            ] = &VegaXmlPlotter::exec_Legend;
 	handle_map[ "Gnuplot"    ] = &VegaXmlPlotter::exec_Gnuplot;
 	handle_map[ "Data"            ] = &VegaXmlPlotter::exec_Data;
-	// handle_map[ "Loop"         ] = &VegaXmlPlotter::exec_Loop;
-	// handle_map[ "Scope"        ] = &VegaXmlPlotter::exec_Loop;
-	
-	// handle_map[ "Axes"         ] = &VegaXmlPlotter::exec_Axes;
-	// handle_map[ "Export"       ] = &VegaXmlPlotter::exec_Export;
-	// handle_map[ "ExportConfig" ] = &VegaXmlPlotter::exec_ExportConfig;
-	// handle_map[ "TLine"        ] = &VegaXmlPlotter::exec_TLine;
-	// handle_map[ "Rect"         ] = &VegaXmlPlotter::exec_Rect;
-	// handle_map[ "Ellipse"      ] = &VegaXmlPlotter::exec_Ellipse;
-	// handle_map[ "TLatex"       ] = &VegaXmlPlotter::exec_TLatex;
-	// handle_map[ "TLegend"      ] = &VegaXmlPlotter::exec_TLegend;
-	// handle_map[ "Legend"       ] = &VegaXmlPlotter::exec_TLegend;
-	// handle_map[ "Palette"      ] = &VegaXmlPlotter::exec_Palette;
-	// handle_map[ "ColorAxis"    ] = &VegaXmlPlotter::exec_ColorAxis;
-
-	// handle_map[ "StatBox"      ] = &VegaXmlPlotter::exec_StatBox;
-	// handle_map[ "Histo"        ] = &VegaXmlPlotter::exec_Histo;
-	// handle_map[ "Graph"        ] = &VegaXmlPlotter::exec_Graph;
-	// handle_map[ "TF1"          ] = &VegaXmlPlotter::exec_TF1;
-
-	// handle_map[ "Canvas"       ] = &VegaXmlPlotter::exec_Canvas;
-	// handle_map[ "Clear"        ] = &VegaXmlPlotter::exec_Clear;
-	// handle_map[ "Pad"          ] = &VegaXmlPlotter::exec_Pad;
-	// handle_map[ "Margins"      ] = &VegaXmlPlotter::exec_Margins;
 
 	/*** Transforms ***/
 	handle_map[ "Transforms"   ] = &VegaXmlPlotter::exec_Transforms;

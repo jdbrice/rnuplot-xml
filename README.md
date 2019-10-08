@@ -86,3 +86,5 @@ Attributes:
 
 ### Libraries and tools
 - Gnuplot iostream interface for c++ (https://code.google.com/archive/p/gnuplot-cpp/)
+- Loguru (https://github.com/emilk/loguru)
+- rapidXML 
