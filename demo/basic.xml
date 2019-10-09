@@ -1,0 +1,45 @@
+<config>
+	<TFile name="d" url="sample_data.root" />
+
+	<Data name="h1" from="d/h1" />
+	<Data name="h2" from="d/h2" />
+	<Data name="hSum" from="d/hSum" />
+
+	<Data name="h3" from="d/h3" local="true" />
+
+	<Gnuplot>
+		# set the terminal output to PDF
+		set terminal pdfcairo font ", 16"
+		# set the output filename
+		set output "basic0.pdf"
+		
+
+		# add a 5% margin above top data point
+		set auto fix
+		set offsets 0, 0, 50, 0.0
+
+		# Add x and y labels
+		set xlabel "x (units)" 
+		set ylabel "dN/dx (units)^{-1}"
+		
+		set style fill transparent solid 0.3 noborder
+		
+		
+		set bars small #removes caps from error bars
+		plot h1 using 1:2 with fillstep t "Gaussian", h2 u 1:2 with boxes t "Landau", hSum with histeps lw 3 t "Sum", hSum u 1:2:5:6 with yerr ls 3 pt 15 ps 0 lw 2 notitle
+		#, hSum u 1:2:("☆") with labels notitle tc ls 2 font ", 10"
+	</Gnuplot>
+
+
+	<Gnuplot script='
+		reset
+		set terminal pngcairo size 1200, 900
+		set output "basic1.png"
+
+		set auto fix
+		set offsets -0.5, 0, -0.5, 0
+
+		load "turbo.pal"
+		#set logscale cb
+		plot h3 u 1:2:($3 < 1 ? NaN : $3) with image ' />
+</config>
