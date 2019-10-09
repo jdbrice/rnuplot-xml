@@ -22,7 +22,7 @@ class DataFileMaker {
 
 
 		// master convert (handles all histogram obects)
-		string convert( TH1 * h, string format, string fn = "" ) {
+		string convert( TH1 * h, string format, string fn = "", bool binary = false ) {
 
 			std::ofstream tmp;
 			std::string name;
@@ -50,7 +50,7 @@ class DataFileMaker {
 		}
 
 
-		void convert_TH1( std::ofstream &tmp, TH1*h, string format ){
+		void convert_TH1( std::ofstream &tmp, TH1*h, string format, bool binary = false ){
 			LOG_SCOPE_FUNCTION( INFO );
 
 			if ( "" == format ){
@@ -112,7 +112,7 @@ class DataFileMaker {
 
 		} // convert_TH1
 
-		void convert_TH2( std::ofstream &tmp, TH2*h, string format ){
+		void convert_TH2( std::ofstream &tmp, TH2*h, string format, bool binary = false ){
 			LOG_SCOPE_FUNCTION( INFO );
 
 			if ( "" == format ){
@@ -177,7 +177,7 @@ class DataFileMaker {
 
 		} // convert_TH2
 
-		void convert_TH3( std::ofstream &tmp, TH3*h, string format ){
+		void convert_TH3( std::ofstream &tmp, TH3*h, string format, bool binary = false ){
 			LOG_SCOPE_FUNCTION( INFO );
 		}
 

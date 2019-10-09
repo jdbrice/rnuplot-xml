@@ -1,6 +1,6 @@
 #include "loguru.h"
 
-#include "VegaXmlPlotter.h"
+#include "Rnuplot.h"
 #include "ChainLoader.h"
 #include "XmlHistogram.h"
 #include "Utils.h"
@@ -17,14 +17,14 @@
 
 #include <thread>
 
-void VegaXmlPlotter::exec_Transforms( string _path ){
+void Rnuplot::exec_Transforms( string _path ){
 	LOG_SCOPE_FUNCTION(INFO);
 
 	// hmm
 	exec_Loop( _path );
 }
 
-void VegaXmlPlotter::exec_transform_SetBinError( string _path ){
+void Rnuplot::exec_transform_SetBinError( string _path ){
 	LOG_SCOPE_FUNCTION(INFO);
 	
 	TH1 * h = findHistogram( _path, 0 );
@@ -61,7 +61,7 @@ void VegaXmlPlotter::exec_transform_SetBinError( string _path ){
 	}
 }
 
-void VegaXmlPlotter::exec_transform_Projection( string _path ){
+void Rnuplot::exec_transform_Projection( string _path ){
 	LOG_SCOPE_FUNCTION(INFO);
 	if ( !config.exists( _path + ":save_as" ) ){
 		// ERRORC( "Must provide " << quote( "save_as" ) << " attribute to save transformation" );
@@ -152,7 +152,7 @@ void VegaXmlPlotter::exec_transform_Projection( string _path ){
 	}
 }
 
-void VegaXmlPlotter::exec_transform_ProjectionX( string _path){
+void Rnuplot::exec_transform_ProjectionX( string _path){
 	LOG_SCOPE_FUNCTION(INFO);
 	if ( !config.exists( _path + ":save_as" ) ){
 		return;
@@ -189,7 +189,7 @@ void VegaXmlPlotter::exec_transform_ProjectionX( string _path){
 	globalHistos[ nn ] = h;
 }
 
-void VegaXmlPlotter::exec_transform_ProjectionY( string _path){
+void Rnuplot::exec_transform_ProjectionY( string _path){
 	LOG_SCOPE_FUNCTION(INFO);
 	if ( !config.exists( _path + ":save_as" ) ){
 		// ERRORC( "Must provide " << quote( "save_as" ) << " attribute to save transformation" );
@@ -234,7 +234,7 @@ void VegaXmlPlotter::exec_transform_ProjectionY( string _path){
 	globalHistos[ nn ] = h;
 }
 
-void VegaXmlPlotter::exec_transform_FitSlices( string _path){
+void Rnuplot::exec_transform_FitSlices( string _path){
 	LOG_SCOPE_FUNCTION(INFO);
 	if ( !config.exists( _path + ":save_as" ) ){
 		LOG_F( ERROR, "Must provide \"save_as\" attribute to save transformation" );
@@ -270,7 +270,7 @@ void VegaXmlPlotter::exec_transform_FitSlices( string _path){
 	LOG_F( INFO, "Added %s_0, %s_1, %s_2, %s_3", nn.c_str(), nn.c_str(), nn.c_str(), nn.c_str() );
 }
 
-void VegaXmlPlotter::exec_transform_MultiAdd( string _path ){
+void Rnuplot::exec_transform_MultiAdd( string _path ){
 	LOG_SCOPE_FUNCTION(INFO);
 	if ( !config.exists( _path + ":save_as" ) ){
 		// ERRORC( "Must provide " << quote( "save_as" ) << " attribute to save transformation" );
@@ -310,7 +310,7 @@ void VegaXmlPlotter::exec_transform_MultiAdd( string _path ){
 	globalHistos[nn] = hSum;
 }
 
-void VegaXmlPlotter::exec_transform_Add( string _path){
+void Rnuplot::exec_transform_Add( string _path){
 	LOG_SCOPE_FUNCTION(INFO);
     
 	if ( !config.exists( _path + ":save_as" ) ){
@@ -339,7 +339,7 @@ void VegaXmlPlotter::exec_transform_Add( string _path){
 	globalHistos[nn] = hSum;
 }
 
-void VegaXmlPlotter::exec_transform_Divide( string _path){
+void Rnuplot::exec_transform_Divide( string _path){
 	LOG_SCOPE_FUNCTION(INFO);
 	if ( !config.exists( _path + ":save_as" ) ){
 		// ERRORC( "Must provide " << quote( "save_as" ) << " attribute to save transformation" );
@@ -373,7 +373,7 @@ void VegaXmlPlotter::exec_transform_Divide( string _path){
 	globalHistos[nn] = hOther;
 }
 
-void VegaXmlPlotter::exec_transform_Difference( string _path){
+void Rnuplot::exec_transform_Difference( string _path){
 	LOG_SCOPE_FUNCTION(INFO);
 	if ( !config.exists( _path + ":save_as" ) ){
 		LOG_F( ERROR, "must have a save_as attribute" );
@@ -437,7 +437,7 @@ void VegaXmlPlotter::exec_transform_Difference( string _path){
 
 
 
-void VegaXmlPlotter::exec_transform_Rebin( string _path ){
+void Rnuplot::exec_transform_Rebin( string _path ){
 	LOG_SCOPE_FUNCTION(INFO);
 	
 	// rebins to array of bin edges
@@ -558,7 +558,7 @@ void VegaXmlPlotter::exec_transform_Rebin( string _path ){
 	}
 }
 
-void VegaXmlPlotter::exec_transform_Scale( string _path ){
+void Rnuplot::exec_transform_Scale( string _path ){
 	LOG_SCOPE_FUNCTION(INFO);
 
 	string d = config.getXString( _path + ":data" );
@@ -593,7 +593,7 @@ void VegaXmlPlotter::exec_transform_Scale( string _path ){
 		globalHistos[nn] = hOther;
 }
 
-void VegaXmlPlotter::exec_transform_Normalize( string _path ){
+void Rnuplot::exec_transform_Normalize( string _path ){
 	LOG_SCOPE_FUNCTION(INFO);
 	// TODO:
 	// add option to normalize in range given by x1, x2 or b1, b2 etc.
@@ -633,7 +633,7 @@ void VegaXmlPlotter::exec_transform_Normalize( string _path ){
 	globalHistos[nn] = hOther;
 }
 
-void VegaXmlPlotter::exec_transform_Draw( string _path ){
+void Rnuplot::exec_transform_Draw( string _path ){
 	LOG_SCOPE_FUNCTION(INFO);
 
 	string d = config.getXString( _path + ":data" );
@@ -648,7 +648,7 @@ void VegaXmlPlotter::exec_transform_Draw( string _path ){
 	globalHistos[ nn ] = h;
 }
 
-void VegaXmlPlotter::exec_transform_Smooth( string _path ){
+void Rnuplot::exec_transform_Smooth( string _path ){
 	LOG_SCOPE_FUNCTION(INFO);
 
 	bool in_place = false;
@@ -679,7 +679,7 @@ void VegaXmlPlotter::exec_transform_Smooth( string _path ){
 	}
 }
 
-void VegaXmlPlotter::exec_transform_CDF( string _path ){
+void Rnuplot::exec_transform_CDF( string _path ){
 	LOG_SCOPE_FUNCTION(INFO);
 
 	
@@ -705,7 +705,7 @@ void VegaXmlPlotter::exec_transform_CDF( string _path ){
 	globalHistos[nn] = hOther;
 }
 
-void VegaXmlPlotter::exec_transform_BinLabels( string _path ){
+void Rnuplot::exec_transform_BinLabels( string _path ){
 	LOG_F( INFO, "" );
 	if ( !config.exists( _path + ":save_as" ) ){
 		LOG_F( WARNING, "Cannot make CDF in place, abort" );
@@ -734,7 +734,7 @@ void VegaXmlPlotter::exec_transform_BinLabels( string _path ){
 	globalHistos[nn] = hOther;
 }
 
-void VegaXmlPlotter::exec_transform_Clone( string _path ){
+void Rnuplot::exec_transform_Clone( string _path ){
 
 	if ( !config.exists( _path + ":save_as" ) ){
 		LOG_F( ERROR, "<Clone/> Must have a save_as attribute" );
@@ -777,7 +777,7 @@ void VegaXmlPlotter::exec_transform_Clone( string _path ){
 	globalHistos[nn] = hOther;
 }
 
-void VegaXmlPlotter::exec_transform_Style( string _path ){
+void Rnuplot::exec_transform_Style( string _path ){
 	LOG_SCOPE_FUNCTION(INFO);
 	TH1 * h = findHistogram( _path, 0 );
 	if ( nullptr == h ) {
@@ -790,7 +790,7 @@ void VegaXmlPlotter::exec_transform_Style( string _path ){
 	rpl.style( h ).set( config, _path).set( config, _path + ":style" ).set( config, _path + ".style" );
 }
 
-void VegaXmlPlotter::exec_transform_Sumw2( string _path ){
+void Rnuplot::exec_transform_Sumw2( string _path ){
 
 	string d = config.getXString( _path + ":data" );
 	string n = config.getXString( _path + ":name" );
@@ -815,7 +815,7 @@ void VegaXmlPlotter::exec_transform_Sumw2( string _path ){
 	globalHistos[nn] = hOther;
 }
 
-void VegaXmlPlotter::exec_transform_Assign( string _path ){
+void Rnuplot::exec_transform_Assign( string _path ){
 	LOG_SCOPE_FUNCTION(INFO);
 
 	string varname = config.getString( _path + ":var" );
@@ -890,12 +890,12 @@ void VegaXmlPlotter::exec_transform_Assign( string _path ){
 
 }
 
-void VegaXmlPlotter::exec_transform_Print( string _path ){
+void Rnuplot::exec_transform_Print( string _path ){
 	string msg = config.getString( _path + ":msg" );
 	LOG_F(INFO, "%s", msg.c_str());
 }
 
-void VegaXmlPlotter::exec_transform_Format( string _path ){
+void Rnuplot::exec_transform_Format( string _path ){
 	LOG_SCOPE_FUNCTION(INFO);
 
 	// where to store the result
@@ -952,7 +952,7 @@ void VegaXmlPlotter::exec_transform_Format( string _path ){
 
 }
 
-void VegaXmlPlotter::exec_transform_ProcessLine( string _path ){
+void Rnuplot::exec_transform_ProcessLine( string _path ){
 
 	TH1 * h = findHistogram( _path, 0 );
 	if ( nullptr != h ){
@@ -966,7 +966,7 @@ void VegaXmlPlotter::exec_transform_ProcessLine( string _path ){
 
 }
 
-void VegaXmlPlotter::exec_transform_Proof( string _path ){
+void Rnuplot::exec_transform_Proof( string _path ){
 
 	bool setup = config.get<bool>( _path + ":setup", true );
 	string data = config.get<string>( _path + ":data" );
@@ -981,7 +981,7 @@ void VegaXmlPlotter::exec_transform_Proof( string _path ){
 
 }
 
-void VegaXmlPlotter::exec_transform_List( string _path ){
+void Rnuplot::exec_transform_List( string _path ){
 
 	string data = config.get<string>( _path + ":data" );
 

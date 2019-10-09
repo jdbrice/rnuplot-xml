@@ -1,7 +1,7 @@
 
 
 
-#include "VegaXmlPlotter.h"
+#include "Rnuplot.h"
 #include "ChainLoader.h"
 #include "XmlHistogram.h"
 #include "Utils.h"
@@ -47,9 +47,9 @@ inline bool exists_test (const std::string& name) {
 
 
 
-void VegaXmlPlotter::init(){
+void Rnuplot::init(){
 	LOG_SCOPE_FUNCTION(INFO);
-	LOG_F( INFO, "VegaXmlPlotter Starting" );
+	LOG_F( INFO, "Rnuplot Starting" );
 	string logfile = config[ "Log:url" ];
 	if ( config.exists( "Log:url" ) ){
 		LOG_F( INFO, "Writing log to %s", logfile.c_str() );
@@ -60,59 +60,59 @@ void VegaXmlPlotter::init(){
 
 	
 
-	// handle_map[ "TCanvas"      ] = &VegaXmlPlotter::exec_TCanvas;
-	handle_map[ "TFile"         ] = &VegaXmlPlotter::exec_TFile;
-	handle_map[ "TFileOut"         ] = &VegaXmlPlotter::exec_TFileOut;
-	handle_map[ "Equation"     ] = &VegaXmlPlotter::exec_Equation;
-	handle_map[ "E"            ] = &VegaXmlPlotter::exec_Equation;
-	handle_map[ "Latex"        ] = &VegaXmlPlotter::exec_Latex;
-	// handle_map[ "Script"       ] = &VegaXmlPlotter::exec_Script;
-	handle_map[ "Command"         ] = &VegaXmlPlotter::exec_Command;
-	handle_map[ "C"         ] = &VegaXmlPlotter::exec_Command;
-	handle_map[ "Plot"         ] = &VegaXmlPlotter::exec_Plot;
-	handle_map[ "Histogram"    ] = &VegaXmlPlotter::exec_Histogram;
-	handle_map[ "H"            ] = &VegaXmlPlotter::exec_Histogram;
-	handle_map[ "Legend"            ] = &VegaXmlPlotter::exec_Legend;
-	handle_map[ "Gnuplot"    ] = &VegaXmlPlotter::exec_Gnuplot;
-	handle_map[ "Data"            ] = &VegaXmlPlotter::exec_Data;
+	// handle_map[ "TCanvas"      ] = &Rnuplot::exec_TCanvas;
+	handle_map[ "TFile"         ] = &Rnuplot::exec_TFile;
+	handle_map[ "TFileOut"         ] = &Rnuplot::exec_TFileOut;
+	handle_map[ "Equation"     ] = &Rnuplot::exec_Equation;
+	handle_map[ "E"            ] = &Rnuplot::exec_Equation;
+	handle_map[ "Latex"        ] = &Rnuplot::exec_Latex;
+	// handle_map[ "Script"       ] = &Rnuplot::exec_Script;
+	handle_map[ "Command"         ] = &Rnuplot::exec_Command;
+	handle_map[ "C"         ] = &Rnuplot::exec_Command;
+	handle_map[ "Plot"         ] = &Rnuplot::exec_Plot;
+	handle_map[ "Histogram"    ] = &Rnuplot::exec_Histogram;
+	handle_map[ "H"            ] = &Rnuplot::exec_Histogram;
+	handle_map[ "Legend"            ] = &Rnuplot::exec_Legend;
+	handle_map[ "Gnuplot"    ] = &Rnuplot::exec_Gnuplot;
+	handle_map[ "Data"            ] = &Rnuplot::exec_Data;
 
 	/*** Transforms ***/
-	handle_map[ "Transforms"   ] = &VegaXmlPlotter::exec_Transforms;
-	handle_map[ "Transform"   ] = &VegaXmlPlotter::exec_Transforms;
+	handle_map[ "Transforms"   ] = &Rnuplot::exec_Transforms;
+	handle_map[ "Transform"   ] = &Rnuplot::exec_Transforms;
 
-	handle_map[ "Projection"   ] = &VegaXmlPlotter::exec_transform_Projection;
-	handle_map[ "ProjectionX"  ] = &VegaXmlPlotter::exec_transform_ProjectionX;
-	handle_map[ "ProjectionY"  ] = &VegaXmlPlotter::exec_transform_ProjectionY;
-	handle_map[ "FitSlices"    ] = &VegaXmlPlotter::exec_transform_FitSlices;
-	handle_map[ "FitSlice "    ] = &VegaXmlPlotter::exec_transform_FitSlices;
-	handle_map[ "MultiAdd"     ] = &VegaXmlPlotter::exec_transform_MultiAdd;
-	handle_map[ "Add"          ] = &VegaXmlPlotter::exec_transform_Add;
-	handle_map[ "Divide"       ] = &VegaXmlPlotter::exec_transform_Divide;
-	handle_map[ "Difference"   ] = &VegaXmlPlotter::exec_transform_Difference;
-	handle_map[ "Rebin"        ] = &VegaXmlPlotter::exec_transform_Rebin;
-	handle_map[ "Scale"        ] = &VegaXmlPlotter::exec_transform_Scale;
-	handle_map[ "Normalize"    ] = &VegaXmlPlotter::exec_transform_Normalize;
-	handle_map[ "Draw"         ] = &VegaXmlPlotter::exec_transform_Draw;
-	handle_map[ "Clone"        ] = &VegaXmlPlotter::exec_transform_Clone;
-	handle_map[ "Smooth"       ] = &VegaXmlPlotter::exec_transform_Smooth;
-	handle_map[ "CDF"          ] = &VegaXmlPlotter::exec_transform_CDF;
-	handle_map[ "Style"        ] = &VegaXmlPlotter::exec_transform_Style;
-	handle_map[ "SetBinError"  ] = &VegaXmlPlotter::exec_transform_SetBinError;
-	handle_map[ "BinLabels"    ] = &VegaXmlPlotter::exec_transform_BinLabels;
-	handle_map[ "Sumw2"        ] = &VegaXmlPlotter::exec_transform_Sumw2;
-	handle_map[ "ProcessLine"  ] = &VegaXmlPlotter::exec_transform_ProcessLine;
-	handle_map[ "Assign"       ] = &VegaXmlPlotter::exec_transform_Assign;
-	handle_map[ "Format"       ] = &VegaXmlPlotter::exec_transform_Format;
-	handle_map[ "Print"        ] = &VegaXmlPlotter::exec_transform_Print;
-	handle_map[ "Proof"        ] = &VegaXmlPlotter::exec_transform_Proof;
-	handle_map[ "List"         ] = &VegaXmlPlotter::exec_transform_List;
+	handle_map[ "Projection"   ] = &Rnuplot::exec_transform_Projection;
+	handle_map[ "ProjectionX"  ] = &Rnuplot::exec_transform_ProjectionX;
+	handle_map[ "ProjectionY"  ] = &Rnuplot::exec_transform_ProjectionY;
+	handle_map[ "FitSlices"    ] = &Rnuplot::exec_transform_FitSlices;
+	handle_map[ "FitSlice "    ] = &Rnuplot::exec_transform_FitSlices;
+	handle_map[ "MultiAdd"     ] = &Rnuplot::exec_transform_MultiAdd;
+	handle_map[ "Add"          ] = &Rnuplot::exec_transform_Add;
+	handle_map[ "Divide"       ] = &Rnuplot::exec_transform_Divide;
+	handle_map[ "Difference"   ] = &Rnuplot::exec_transform_Difference;
+	handle_map[ "Rebin"        ] = &Rnuplot::exec_transform_Rebin;
+	handle_map[ "Scale"        ] = &Rnuplot::exec_transform_Scale;
+	handle_map[ "Normalize"    ] = &Rnuplot::exec_transform_Normalize;
+	handle_map[ "Draw"         ] = &Rnuplot::exec_transform_Draw;
+	handle_map[ "Clone"        ] = &Rnuplot::exec_transform_Clone;
+	handle_map[ "Smooth"       ] = &Rnuplot::exec_transform_Smooth;
+	handle_map[ "CDF"          ] = &Rnuplot::exec_transform_CDF;
+	handle_map[ "Style"        ] = &Rnuplot::exec_transform_Style;
+	handle_map[ "SetBinError"  ] = &Rnuplot::exec_transform_SetBinError;
+	handle_map[ "BinLabels"    ] = &Rnuplot::exec_transform_BinLabels;
+	handle_map[ "Sumw2"        ] = &Rnuplot::exec_transform_Sumw2;
+	handle_map[ "ProcessLine"  ] = &Rnuplot::exec_transform_ProcessLine;
+	handle_map[ "Assign"       ] = &Rnuplot::exec_transform_Assign;
+	handle_map[ "Format"       ] = &Rnuplot::exec_transform_Format;
+	handle_map[ "Print"        ] = &Rnuplot::exec_transform_Print;
+	handle_map[ "Proof"        ] = &Rnuplot::exec_transform_Proof;
+	handle_map[ "List"         ] = &Rnuplot::exec_transform_List;
 
 
 	Gnuplot::set_terminal_std("qt");
 
 } // init
 
-void VegaXmlPlotter::exec_node( string _path ){
+void Rnuplot::exec_node( string _path ){
 	LOG_SCOPE_FUNCTION(INFO);
 	if ( false == config.exists( _path ) )
 		return;
@@ -128,7 +128,7 @@ void VegaXmlPlotter::exec_node( string _path ){
 	exec( tag, _path );
 } // exec_node
 
-string VegaXmlPlotter::random_string( size_t length ){
+string Rnuplot::random_string( size_t length ){
 	auto randchar = []() -> char
 	{
 		const char charset[] =
@@ -143,7 +143,7 @@ string VegaXmlPlotter::random_string( size_t length ){
 	return str;
 }
 
-void VegaXmlPlotter::make(){
+void Rnuplot::make(){
 	LOG_SCOPE_FUNCTION(INFO);
 
 	// Load data first
@@ -187,7 +187,7 @@ void VegaXmlPlotter::make(){
 
 } // make
 
-void VegaXmlPlotter::loadDataFile( string _path ){
+void Rnuplot::loadDataFile( string _path ){
 	LOG_SCOPE_FUNCTION(INFO);
 	if ( config.exists( _path + ":name" ) && config.exists( _path + ":url" )  ){
 		string name = config.getXString( _path+":name" );
@@ -224,7 +224,7 @@ void VegaXmlPlotter::loadDataFile( string _path ){
 	}
 } // loadDataFiles
 
-void VegaXmlPlotter::exec_TFileOut( string _path ){
+void Rnuplot::exec_TFileOut( string _path ){
 	LOG_SCOPE_FUNCTION(INFO);
 	string url = config.get<string>( _path + ":url" );
 	string mode = config.get<string>( _path + ":mode", "RECREATE" );
@@ -232,12 +232,12 @@ void VegaXmlPlotter::exec_TFileOut( string _path ){
 	dataOut = new TFile( url.c_str(), mode.c_str() );
 }
 
-int VegaXmlPlotter::numberOfData() {
+int Rnuplot::numberOfData() {
 	LOG_SCOPE_FUNCTION(INFO);
 	return dataFiles.size() + dataChains.size();
 } // numberOfData
 
-void VegaXmlPlotter::loadChain( string _path ){
+void Rnuplot::loadChain( string _path ){
 	LOG_SCOPE_FUNCTION(INFO);
 	string name     = config.getXString( _path + ":name" );
 	string treeName = config.getXString( _path + ":treeName" );
@@ -263,7 +263,7 @@ void VegaXmlPlotter::loadChain( string _path ){
 	// LOG_S(INFO) << "Chain has " << nFiles << plural( nFiles, " file", " files" );
 } // loadChain
 
-void VegaXmlPlotter::loadData(){
+void Rnuplot::loadData(){
 	LOG_SCOPE_FUNCTION(INFO);
 	vector<string> data_nodes = config.childrenOf( nodePath, "Data" );
 	
@@ -282,7 +282,7 @@ void VegaXmlPlotter::loadData(){
 } // loadData
 
 
-TObject* VegaXmlPlotter::findObject( string _path ){
+TObject* Rnuplot::findObject( string _path ){
 	LOG_SCOPE_FUNCTION(INFO);
 
 	string data = config.getXString( _path + ":data", config.getXString( _path + ":data" ) );
@@ -318,7 +318,7 @@ TObject* VegaXmlPlotter::findObject( string _path ){
 	return nullptr;
 } // findObject
 
-TH1 *VegaXmlPlotter::findHistogram( string _data, string _name, string _path, int iHist ){
+TH1 *Rnuplot::findHistogram( string _data, string _name, string _path, int iHist ){
 	LOG_SCOPE_FUNCTION(INFO);
 	LOG_F( 1, "_data=%s, _name=%s", _data.c_str(), _name.c_str() );
 
@@ -373,7 +373,7 @@ TH1 *VegaXmlPlotter::findHistogram( string _data, string _name, string _path, in
 	return nullptr;
 } // findHistogram
 
-TH1* VegaXmlPlotter::findHistogram( string _path, int iHist, string _mod ){
+TH1* Rnuplot::findHistogram( string _path, int iHist, string _mod ){
 	LOG_SCOPE_FUNCTION(INFO);
 	LOG_F( 1, "_path=%s, iHist=%d, _mod=%s", _path.c_str(), iHist, _mod.c_str() );
 
@@ -383,7 +383,7 @@ TH1* VegaXmlPlotter::findHistogram( string _path, int iHist, string _mod ){
 	return findHistogram( data, name, _path, iHist );
 } //findHistogram
 
-TH1* VegaXmlPlotter::makeHistoFromDataTree( string _path, int iHist ){
+TH1* Rnuplot::makeHistoFromDataTree( string _path, int iHist ){
 	LOG_SCOPE_FUNCTION(INFO);
 
 	string data = config.getXString( _path + ":data" );
@@ -472,7 +472,7 @@ TH1* VegaXmlPlotter::makeHistoFromDataTree( string _path, int iHist ){
 
 
 
-void VegaXmlPlotter::exec_children( string _path ){
+void Rnuplot::exec_children( string _path ){
 	LOG_SCOPE_FUNCTION( 2 );
 	vector<string> paths = config.childrenOf( _path, 1 );
 	for ( string p : paths ){
@@ -480,7 +480,7 @@ void VegaXmlPlotter::exec_children( string _path ){
 	}
 } //exec_children
 
-void VegaXmlPlotter::exec_children( string _path, string tag_type ){
+void Rnuplot::exec_children( string _path, string tag_type ){
 	LOG_SCOPE_FUNCTION( 2 );
 	vector<string> paths = config.childrenOf( _path, 1 );
 	// DLOG( "exec children of %s, where tag = %s", _path.c_str(), tag_type.c_str() );
@@ -492,7 +492,7 @@ void VegaXmlPlotter::exec_children( string _path, string tag_type ){
 	}
 } //exec_children
 
-void VegaXmlPlotter::exec_TFile( string _path ){
+void Rnuplot::exec_TFile( string _path ){
 	LOG_SCOPE_FUNCTION( 2 );
 	if ( config.exists( _path + ":name" ) && !config.exists( _path + ":treeName" ) ){
 		loadDataFile( _path );
@@ -501,7 +501,7 @@ void VegaXmlPlotter::exec_TFile( string _path ){
 	}
 } // exec_Data
 
-void VegaXmlPlotter::exec_Equation( string _path ){
+void Rnuplot::exec_Equation( string _path ){
 	LOG_SCOPE_FUNCTION( INFO );
 
 		gnuplot.cmd( current_out );
@@ -526,7 +526,7 @@ void VegaXmlPlotter::exec_Equation( string _path ){
 }
 
 
-void VegaXmlPlotter::exec_Plot( string _path ) {
+void Rnuplot::exec_Plot( string _path ) {
 	LOG_SCOPE_FUNCTION( INFO );
 	// DLOG( "Makign Plot[%s] @ %s", config.getString( _path+":name", "" ).c_str(), _path.c_str() );
 
@@ -585,12 +585,12 @@ void VegaXmlPlotter::exec_Plot( string _path ) {
 	// exec_children( _path, "Export" );
 } // exec_Plot
 
-void VegaXmlPlotter::exec_Command( string _path ){
+void Rnuplot::exec_Command( string _path ){
 	gnuplot.cmd( config.get<string>( _path ) );
 }
 
 
-void VegaXmlPlotter::exec_Legend( string _path ){
+void Rnuplot::exec_Legend( string _path ){
 	LOG_SCOPE_FUNCTION( INFO );
 	if ( config.get<bool>( _path + ":visible", true ) == false ){
 		gnuplot.cmd( "set nokey" );
@@ -605,7 +605,7 @@ void VegaXmlPlotter::exec_Legend( string _path ){
 	}
 }
 
-void VegaXmlPlotter::exec_Histogram( string _path ){
+void Rnuplot::exec_Histogram( string _path ){
 
 	LOG_SCOPE_FUNCTION( INFO );
 	gnuplot.cmd( current_out );
@@ -672,7 +672,7 @@ void VegaXmlPlotter::exec_Histogram( string _path ){
 
 }
 
-void VegaXmlPlotter::exec_Gnuplot( string _path ){
+void Rnuplot::exec_Gnuplot( string _path ){
 	LOG_SCOPE_FUNCTION( INFO );
 
 	//  get inline BUT means escape chars :(
@@ -739,7 +739,7 @@ void VegaXmlPlotter::exec_Gnuplot( string _path ){
 
 }
 
-void VegaXmlPlotter::exec_Data( string _path ){
+void Rnuplot::exec_Data( string _path ){
 	LOG_SCOPE_FUNCTION( INFO );
 	if ( config.exists(_path + ":name" ) == false ){
 		LOG_F( ERROR, "Must provide name for data file" );
@@ -793,7 +793,7 @@ void VegaXmlPlotter::exec_Data( string _path ){
 	LOG_F( INFO, "Data File [%s] = %s", dfvn.c_str(), dfn.c_str());
 }
 
-void VegaXmlPlotter::exec_Loop( string _path ){
+void Rnuplot::exec_Loop( string _path ){
 	LOG_SCOPE_FUNCTION( INFO );
 	vector<string> states;
 	string var = "state";
@@ -917,7 +917,7 @@ void VegaXmlPlotter::exec_Loop( string _path ){
 
 } // exec_Loop
 
-vector<string> VegaXmlPlotter::glob( string query ){
+vector<string> Rnuplot::glob( string query ){
 	LOG_SCOPE_FUNCTION( INFO );
 	vector<string> names;
 	
@@ -970,7 +970,7 @@ vector<string> VegaXmlPlotter::glob( string query ){
 	return names;
 }
 
-bool VegaXmlPlotter::typeMatch( TObject *obj, string type ){
+bool Rnuplot::typeMatch( TObject *obj, string type ){
 	if ( nullptr == obj ) return false;
 	if ( "" == type ) return true;
 	string objType = obj->ClassName();
@@ -978,7 +978,7 @@ bool VegaXmlPlotter::typeMatch( TObject *obj, string type ){
 	return false;
 }
 
-map<string, TObject*> VegaXmlPlotter::dirMap( TDirectory *dir, string prefix, bool dive ) {
+map<string, TObject*> Rnuplot::dirMap( TDirectory *dir, string prefix, bool dive ) {
 	LOG_SCOPE_FUNCTION(INFO);
 
 	map<string, TObject*> mp;
@@ -1020,7 +1020,7 @@ std::string cmdexec(const char* cmd) {
 }
 
 
-void VegaXmlPlotter::exec_Latex( string _path ){
+void Rnuplot::exec_Latex( string _path ){
 	LOG_SCOPE_FUNCTION( INFO );
 
 	string figure_filename = config.get<string>( _path + ":from" );

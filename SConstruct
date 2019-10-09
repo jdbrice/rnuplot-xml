@@ -59,7 +59,7 @@ if int(vega_debug) > 0 :
 	#print "DEBUG ENABLED"
 	common_env.Append(CXXFLAGS 		= "-DVEGADEBUG=1" )
 
-target = common_env.Program( target='rnuplot', source=[ "Engine.cpp", "VegaXmlPlotter.cpp", "gnuplot_i.cpp", "Transforms.cpp" ] )
+target = common_env.Program( target='rnuplot', source=[ "Engine.cpp", "Rnuplot.cpp", "gnuplot_i.cpp", "Transforms.cpp" ] )
 
 # Depends( target, Glob( JDB_LIB + "/include/jdb/*" ) )
 

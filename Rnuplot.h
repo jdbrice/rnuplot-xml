@@ -35,13 +35,13 @@ using namespace std;
 
 
 
-class VegaXmlPlotter : public TaskRunner
+class Rnuplot : public TaskRunner
 {
 protected:
 
 	bool initializedGROOT = false;
 
-	typedef void (VegaXmlPlotter::*MFP)(string);
+	typedef void (Rnuplot::*MFP)(string);
 	std::map <string, MFP> handle_map;
 
 
@@ -61,9 +61,9 @@ protected:
 
 public:
 
-	virtual const char* classname() const { return "VegaXmlPlotter"; }
-	VegaXmlPlotter() {}
-	~VegaXmlPlotter() {}
+	virtual const char* classname() const { return "Rnuplot"; }
+	Rnuplot() {}
+	~Rnuplot() {}
 
 	virtual void init();
 	virtual void make();
