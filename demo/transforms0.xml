@@ -1,0 +1,75 @@
+<config>
+	<TFile name="da" url="/Users/jdb/bnl/work/upc/RhoAnalysis/bin/Run10AuAu_PIPI_NOMINAL.root" />
+	<TFile name="sl" url="/Users/jdb/bnl/work/upc/RhoAnalysis/bin/Run10AuAu_PIPI_SL.root" />
+	<TFileOut url="demo/transforms0.out.root" />
+
+	<Transform>
+		<Rebin save_as="dapolhMeanCosPhiPt" name="da/hPolMeanCosPhiPt" x="4" />
+		<Rebin save_as="dapolhMeanCos2PhiPt" name="da/hPolMeanCos2PhiPt" x="2" />
+		<Rebin save_as="dapolhMeanCos4PhiPt" name="da/hPolMeanCos4PhiPt" x="4" />
+
+		<Rebin save_as="dapolhlsMeanCosPhiPt" name="da/hlsPolMeanCosPhiPt" x="8" />
+		<Rebin save_as="dapolhlsMeanCos2PhiPt" name="da/hlsPolMeanCos2PhiPt" x="8" />
+		<Rebin save_as="dapolhlsMeanCos4PhiPt" name="da/hlsPolMeanCos4PhiPt" x="8" />
+
+		<Rebin save_as="slpolhMeanCosPhiPt" name="sl/hPolMeanCosPhiPt" x="4" />
+		<Rebin save_as="slpolhMeanCos2PhiPt" name="sl/hPolMeanCos2PhiPt" x="4" />
+		<Rebin save_as="slpolhMeanCos4PhiPt" name="sl/hPolMeanCos4PhiPt" x="4" />
+	</Transform>
+
+
+	<Data name="d1phipt" from="dapolhMeanCosPhiPt" local="true" format="x y dy"/>
+	<Data name="s2phipt" from="dapolhMeanCos2PhiPt" />
+	<Data name="b2phipt" from="dapolhlsMeanCos2PhiPt" />
+	<Data name="l2phipt" from="slpolhMeanCos2PhiPt" />
+	<Data name="d4phipt" from="dapolhMeanCos4PhiPt" />
+
+
+
+	<!-- <Gnuplot pause="false">
+	set terminal epslatex linewidth 2 size 4,2.5 standalone
+	set output "transforms0.tex"
+	set key spacing 1.2
+	set xrange[0:0.2]
+	signal_color="#FF0000"
+	back_color="#0000FF"
+	sl_color="#000000"
+	set xlabel "$P_\\perp$ (GeV/c)"
+	set ylabel "2 $\\times \\langle \\cos 2 \\Delta\\phi \\rangle$"
+
+
+	plot s2phipt using 1:2:5:6 with yerr lc rgb signal_color t "$\\pi^{+}\\pi^{-}$" ls 2, \
+		s2phipt with histeps notitle lc rgb signal_color, \
+		b2phipt with histeps notitle lc rgb back_color, \
+		b2phipt using 1:2:5:6 with yerr lc rgb back_color t "$\\pi^{+}\\pi^{+} + \\pi^{-}\\pi^{-}$", \
+		l2phipt with histeps notitle lc rgb sl_color, \
+		l2phipt using 1:2:5:6 with yerr lc rgb sl_color t "STARLight"
+
+
+	</Gnuplot> -->
+
+	<!-- <Latex from="transforms0.tex" /> -->
+
+
+	<Gnuplot>
+		set terminal pdf size 4,2.5
+		set output "transforms0.pdf"
+		set key spacing 1.2
+		set xrange[0:0.2]
+		signal_color="#FF0000"
+		back_color="#0000FF"
+		sl_color="#000000"
+		set xlabel "$P_\\perp$ (GeV/c)"
+		set ylabel "2 $\\times \\langle \\cos 2 \\Delta\\phi \\rangle$"
+
+		set bars 0
+
+		plot s2phipt using 1:2:($6-$2) with errorbars linetype 2 lc rgb signal_color t "$\\pi^{+}\\pi^{-}$", \
+			s2phipt with histeps notitle lc rgb signal_color, \
+			b2phipt with histeps notitle lc rgb back_color, \
+			b2phipt using 1:2:5:6 with yerr lc rgb back_color t "$\\pi^{+}\\pi^{+} + \\pi^{-}\\pi^{-}$", \
+			l2phipt with histeps notitle lc rgb sl_color, \
+			l2phipt using 1:2:5:6 with yerr lc rgb sl_color t "STARLight"
+	</Gnuplot>
+
+</config>

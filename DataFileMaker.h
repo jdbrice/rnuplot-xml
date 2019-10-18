@@ -59,7 +59,7 @@ class DataFileMaker {
 			}
 
 			vector<double> x, y, x_low, x_high, y_low, y_high;
-			for ( int i = 1; i < h->GetNbinsX(); i++ ){
+			for ( int i = 1; i < h->GetNbinsX() + 1; i++ ){
 				double vx = h->GetBinCenter( i );
 				double vy = h->GetBinContent( i );
 				double vey = h->GetBinError( i );

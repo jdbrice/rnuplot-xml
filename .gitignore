@@ -10,3 +10,6 @@ rnuplot
 .DS_Store
 *.root
 .vscode/
+*.png
+*.pdf
+*.tex

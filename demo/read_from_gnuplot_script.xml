@@ -1,0 +1,11 @@
+<config>
+	<TFile name="d" url="/Users/jdb/bnl/work/upc/RhoAnalysis/bin/Run10AuAu_PIPI_NOMINAL.root" />
+	
+	<!-- 1D Histogram -->
+	<Data name="h1d" from="d/hPolMeanCosPhiPt" local="true" format="x y xlow xhigh dy"/>
+	<Data name="zdc" from="d/ZDCEastWest" local="true"/>
+
+
+	<Gnuplot script='demo.gnuplot' />
+
+</config>

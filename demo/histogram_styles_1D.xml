@@ -1,0 +1,34 @@
+<config>
+	<TFile name="d" url="sample_data.root" />
+
+	<Data name="h1" from="d/h1" />
+	<Data name="h2" from="d/h2" />
+	<Data name="h4" from="d/h4" local="true" />
+	<Data name="hSum" from="d/hSum" local="true"/>
+
+	<Gnuplot>
+		reset
+		# set the terminal output to PDF
+		set terminal pdfcairo font ", 16"
+		# set the output filename
+		set output "histogram_styles_1D.pdf"
+
+		# add a 5% margin above top data point
+		#set auto fix
+		#set offsets 0, 0, 50, 0.0
+
+
+		# Add x and y labels
+		set xlabel "x (units)" 
+		set ylabel "dN/dx (units)^{-1}"
+		
+		
+		set bars small #removes caps from error bars
+		plot h4 u 1:2:5:6 with yerr ls 2 pt 15 ps 0 lw 2 notitle, h4 u 1:2:("☆") with labels notitle tc ls 2 font ", 6" lw 5, h4 u 1:2 with histeps ls 2
+
+		#set output "histogram_styles_1D.pdf"
+
+		plot h4 u 1:2:5:6 with yerr ls 7 pt 15 ps 0 lw 2 notitle, h4 u 1:2 with histeps ls 7
+	</Gnuplot>
+
+</config>

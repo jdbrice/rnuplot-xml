@@ -6,6 +6,7 @@
 	<Data name="hSum" from="d/hSum" />
 
 	<Data name="h3" from="d/h3" local="true" />
+	<Data name="h5" from="d/h5" local="true" />
 
 	<Gnuplot>
 		# set the terminal output to PDF
@@ -42,4 +43,18 @@
 		load "turbo.pal"
 		#set logscale cb
 		plot h3 u 1:2:($3 < 1 ? NaN : $3) with image ' />
+
+	<Gnuplot script='
+		reset
+		set terminal pngcairo size 1200, 900
+		set output "basic2.png"
+
+		set auto fix
+		set offsets -0.5, 0, -0.5, 0
+
+		load "turbo.pal"
+		#set logscale cb
+		set view map
+		set dgrid 100,100
+		splot h5 u 1:2:($3 < 1 ? NaN : $3) with pm3d ' />
 </config>
